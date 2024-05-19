@@ -1,15 +1,12 @@
-export const getMovies = () => {
-  return fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&include_adult=false&include_video=false&page=1&sort_by=popularity.desc`
-  ).then((response) => {
-    if (!response.ok) {
-      throw new Error(response.json().message);
+export const getMovies = async () => {
+  const response = await fetch(
+    'http://localhost:8080/api/movies', {
+    headers: {
+      'Authorization': window.localStorage.getItem('token')
     }
-    return response.json();
-  })
-  .catch((error) => {
-     throw error
-  });
+  }
+  )
+  return response.json();
 };
   
 export const getMovie = (args) => {
@@ -176,4 +173,27 @@ export const getActor = (args) => {
                throw error
             });
           };
+
+
+          export const login = async (username, password) => {
+            const response = await fetch('http://localhost:8080/api/users', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'post',
+                body: JSON.stringify({ username: username, password: password })
+            });
+            return response.json();
+        };
+        
+        export const signup = async (username, password) => {
+            const response = await fetch('http://localhost:8080/api/users?action=register', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'post',
+                body: JSON.stringify({ username: username, password: password })
+            });
+            return response.json();
+        };
 
